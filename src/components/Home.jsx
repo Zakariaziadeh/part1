@@ -1,35 +1,32 @@
 import { useState } from "react";
 import Footer from "./Footer";
-import Main from "./Main";
-import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 function Home({ homeLogOut }) {
   const [isOpen, setIsOpen] = useState(true);
+  
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
-      <div>
-        <Navbar
-          sideBarToggled={() => {
-            setIsOpen(!isOpen);
-          }}
-          onLogout={() => {
-            homeLogOut();
-          }}
-        />
-      </div>
-      <div className="grid grid-cols-6 bg-gray-200">
-        <div className={`col-span-1 ${isOpen ? "block" : "hidden"}`}>
-          <Sidebar />
+    <>
+      {/* Main Content Area Only - no layout wrapper */}
+      <div className="grid grid-cols-1 md:grid-cols-6 bg-gray-200 flex-1">
+        {/* Sidebar */}
+        <div className={`${isOpen ? "md:col-span-1 block" : "hidden"}`}>
+          {isOpen && <Sidebar />}
         </div>
-        <div className="col-span-5">
-          <Main />
+        
+        {/* Main Content */}
+        <div className={`${isOpen ? "md:col-span-5" : "col-span-full"} p-4`}>
+          <div className="bg-white rounded-lg shadow p-6">
+            <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
+            <p>This is your main content area.</p>
+          </div>
         </div>
       </div>
-      <div className="bg-blue-400 text-white">
-        <Footer />
-      </div>
-    </div>
+      
+      {/* Footer */}
+      <Footer />
+    </>
   );
 }
+
 export default Home;
