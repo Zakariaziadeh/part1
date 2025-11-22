@@ -7,26 +7,22 @@
 A modern e-commerce web application for Al Mashaal Roasteries, a traditional coffee and nuts business established in 1975. Built with React.js and Tailwind CSS.
 
 
+
 ## 📸 Screenshots
 
 ### Home Page
 ![Home Page](./screenshots/home.png)
-*Product catalog with shopping cart functionality*
 
 ### Shopping Cart
 ![Cart Page](./screenshots/cart.png)
-*Interactive shopping cart with order processing*
 
 ### About Us
 ![About Page](./screenshots/about.png)
-*Company history and information*
 
 ### Customer Feedback
 ![Feedback Page](./screenshots/feedback.png)
-*Customer feedback management system*
-### Customer Feedback
+### Customer Login
 ![Login Page](./screenshots/login.png)
-*Customer login system*
 
 ## ✨ Features
 
@@ -49,16 +45,21 @@ A modern e-commerce web application for Al Mashaal Roasteries, a traditional cof
 
 ## 📋 Prerequisites
 
-Before running this project, make sure you have the following installed:
-
 - Node.js (version 14 or higher)
 - npm or yarn package manager
 
 ## 🚀 Installation & Setup
 
-Follow these steps to set up the project locally:
-
-### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/al-mashaal-roasteries.git
-cd al-mashaal-roasteries
+# Clone the repository
+git clone https://github.com/Zakariaziadeh/part1.git
+cd part1
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Build for production
+npm run build
