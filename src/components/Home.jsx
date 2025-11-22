@@ -1,24 +1,50 @@
-import { useState } from "react";
 import Footer from "./Footer";
-import Sidebar from "./Sidebar";
 
-function Home({ homeLogOut }) {
-  const [isOpen, setIsOpen] = useState(true);
-  
+function Home() {
   return (
     <>
-      {/* Main Content Area Only - no layout wrapper */}
-      <div className="grid grid-cols-1 md:grid-cols-6 bg-gray-200 flex-1">
-        {/* Sidebar */}
-        <div className={`${isOpen ? "md:col-span-1 block" : "hidden"}`}>
-          {isOpen && <Sidebar />}
-        </div>
-        
-        {/* Main Content */}
-        <div className={`${isOpen ? "md:col-span-5" : "col-span-full"} p-4`}>
-          <div className="bg-white rounded-lg shadow p-6">
-            <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
-            <p>This is your main content area.</p>
+      {/* Main Content Area */}
+      <div className="min-h-screen bg-gray-100">
+        <div className="p-6">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+            <h1 className="text-4xl font-bold text-amber-900 mb-6 text-center">
+              Welcome to Mashaal Roasteries
+            </h1>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+                  Our Products
+                </h2>
+                <ul className="space-y-2 text-amber-700">
+                  <li>• Premium Roasted Coffee</li>
+                  <li>• Fresh Nuts & Dry Fruits</li>
+                  <li>• Quality Chocolate</li>
+                  <li>• Traditional Sweets</li>
+                </ul>
+              </div>
+              
+              <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
+                <h2 className="text-2xl font-semibold text-amber-800 mb-4">
+                  Quick Links
+                </h2>
+                <ul className="space-y-2 text-amber-700">
+                  <li>• View Customer Feedbacks</li>
+                  <li>• Learn About Our History</li>
+                  <li>• Contact Our Team</li>
+                  <li>• Visit Our Store</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <p className="text-lg text-gray-700 mb-4">
+                Experience the taste of tradition since 1975
+              </p>
+              <div className="bg-amber-800 text-white inline-block px-6 py-3 rounded-full font-semibold">
+                Family Owned & Operated
+              </div>
+            </div>
           </div>
         </div>
       </div>
