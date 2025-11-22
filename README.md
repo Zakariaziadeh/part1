@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Al Mashaal Roasteries - E-Commerce Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/React-18.2.0-blue)
+![Tailwind](https://img.shields.io/badge/Tailwind-CSS-38B2AC)
+![Responsive](https://img.shields.io/badge/Design-Responsive-green)
 
-## Available Scripts
+A modern e-commerce web application for Al Mashaal Roasteries, a traditional coffee and nuts business established in 1975. Built with React.js and Tailwind CSS.
 
-In the project directory, you can run:
 
-### `npm start`
+## 📸 Screenshots
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Home Page
+![Home Page](./screenshots/home.png)
+*Product catalog with shopping cart functionality*
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Shopping Cart
+![Cart Page](./screenshots/cart.png)
+*Interactive shopping cart with order processing*
 
-### `npm test`
+### About Us
+![About Page](./screenshots/about.png)
+*Company history and information*
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Customer Feedback
+![Feedback Page](./screenshots/feedback.png)
+*Customer feedback management system*
+### Customer Feedback
+![Login Page](./screenshots/login.png)
+*Customer login system*
 
-### `npm run build`
+## ✨ Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **🛍️ Product Catalog** - Browse premium coffee and nuts products
+- **🛒 Shopping Cart** - Add, remove, and manage cart items
+- **🔐 User Authentication** - Login and registration system
+- **📱 Responsive Design** - Works on desktop, tablet, and mobile
+- **💬 Feedback System** - Customer feedback collection and display
+- **📦 Order Processing** - Complete checkout with order tracking
+- **🎨 Modern UI/UX** - Professional design with smooth animations
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Technologies Used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- **Frontend Framework:** React.js 18
+- **Styling:** Tailwind CSS
+- **Routing:** React Router DOM
+- **Icons:** Material-UI Icons
+- **State Management:** React Hooks + localStorage
+- **Build Tool:** Create React App
 
-### `npm run eject`
+## 📋 Prerequisites
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Before running this project, make sure you have the following installed:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Node.js (version 14 or higher)
+- npm or yarn package manager
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🚀 Installation & Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Follow these steps to set up the project locally:
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/al-mashaal-roasteries.git
+cd al-mashaal-roasteries
