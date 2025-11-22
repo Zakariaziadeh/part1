@@ -6,6 +6,7 @@ import Aboutus from "./components/Aboutus";
 import Home from "./components/Home";
 import Sidebar from "./components/Sidebar";
 import Auth from "./components/Auth";
+import Cart from "./components/Cart"; // Import the Cart component
 
 // Protected Route component
 function ProtectedRoute({ children }) {
@@ -57,6 +58,11 @@ function AppContent() {
             <Route path="/aboutus" element={
               <ProtectedRoute>
                 <Aboutus />
+              </ProtectedRoute>
+            } />
+            <Route path="/cart" element={
+              <ProtectedRoute>
+                <Cart />
               </ProtectedRoute>
             } />
             
