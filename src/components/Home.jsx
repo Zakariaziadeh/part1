@@ -58,39 +58,43 @@ function Home() {
     }
   }, []);
 
-  // Update localStorage when cart changes
+  // Listen for cart storage updates
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  // Listen for storage events (when cart is updated from other components)
-  useEffect(() => {
-    const handleStorageChange = () => {
+    const handleCartUpdate = () => {
       const savedCart = localStorage.getItem('cart');
       if (savedCart) {
         setCart(JSON.parse(savedCart));
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('cartStorageUpdated', handleCartUpdate);
+    
+    return () => {
+      window.removeEventListener('cartStorageUpdated', handleCartUpdate);
+    };
   }, []);
 
   const addToCart = (product) => {
-    const existingItem = cart.find(item => item.id === product.id);
+    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = savedCart.find(item => item.id === product.id);
     let updatedCart;
     
     if (existingItem) {
-      updatedCart = cart.map(item =>
+      updatedCart = savedCart.map(item =>
         item.id === product.id
           ? { ...item, quantity: item.quantity + 1 }
           : item
       );
     } else {
-      updatedCart = [...cart, { ...product, quantity: 1 }];
+      updatedCart = [...savedCart, { ...product, quantity: 1 }];
     }
 
+    // Update both localStorage and state
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
+
+    // Dispatch event to notify other components
+    window.dispatchEvent(new Event('cartStorageUpdated'));
 
     // Show notification
     setNotification(`${product.name} added to cart!`);
@@ -239,8 +243,6 @@ function Home() {
           </div>
         </div>
       </div>
-      
-
     </>
   );
 }
