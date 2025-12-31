@@ -1,108 +1,136 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import API from "../services/api"; // Add this import
 
 function Home() {
-  const products = [
-    {
-      id: 1,
-      name: "Premium Coffee Beans",
-      price: 12.99,
-      image: "/images/coffee-beans.jpg",
-      description: "Freshly roasted premium coffee beans"
-    },
-    {
-      id: 2,
-      name: "Mixed Nuts",
-      price: 8.50,
-      image: "/images/mixed-nuts.jpg",
-      description: "Premium quality mixed nuts"
-    },
-    {
-      id: 3,
-      name: "Dark Chocolate",
-      price: 6.75,
-      image: "/images/dark-chocolate.jpg",
-      description: "Rich dark chocolate bars"
-    },
-    {
-      id: 4,
-      name: "Turkish Delight",
-      price: 5.25,
-      image: "/images/turkish-delight.jpg",
-      description: "Traditional Turkish delight"
-    },
-    {
-      id: 5,
-      name: "Roasted Almonds",
-      price: 7.99,
-      image: "/images/roasted-almonds.jpg",
-      description: "Freshly roasted almonds"
-    },
-    {
-      id: 6,
-      name: "Arabic Coffee",
-      price: 9.99,
-      image: "/images/arabic-coffee.jpg",
-      description: "Traditional Arabic coffee blend"
-    }
-  ];
-
+  const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [notification, setNotification] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // Load cart from localStorage on component mount
+  // Fetch products from backend
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-  }, []);
-
-  // Listen for cart storage updates
-  useEffect(() => {
-    const handleCartUpdate = () => {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
-      }
-    };
-
-    window.addEventListener('cartStorageUpdated', handleCartUpdate);
+    fetchProducts();
     
-    return () => {
-      window.removeEventListener('cartStorageUpdated', handleCartUpdate);
-    };
+    // Load cart from localStorage
+    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCart(savedCart);
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const response = await API.get('/products');
+      
+      if (response.data.success) {
+        setProducts(response.data.products);
+      } else {
+        setError("Failed to load products");
+        // Fallback to sample products if API fails
+        setProducts(getSampleProducts());
+      }
+    } catch (err) {
+      console.error('Error fetching products:', err);
+      setError("Cannot connect to server. Using sample products.");
+      // Fallback to sample products
+      setProducts(getSampleProducts());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Sample products for fallback
+  const getSampleProducts = () => {
+    return [
+      {
+        id: 1,
+        name: "Premium Coffee Beans",
+        price: 12.99,
+        description: "Freshly roasted premium coffee beans",
+        category: "coffee"
+      },
+      {
+        id: 2,
+        name: "Mixed Nuts",
+        price: 8.50,
+        description: "Premium quality mixed nuts",
+        category: "nuts"
+      },
+      {
+        id: 3,
+        name: "Dark Chocolate",
+        price: 6.75,
+        description: "Rich dark chocolate bars",
+        category: "chocolate"
+      },
+      {
+        id: 4,
+        name: "Turkish Delight",
+        price: 5.25,
+        description: "Traditional Turkish delight",
+        category: "sweets"
+      },
+      {
+        id: 5,
+        name: "Roasted Almonds",
+        price: 7.99,
+        description: "Freshly roasted almonds",
+        category: "nuts"
+      },
+      {
+        id: 6,
+        name: "Arabic Coffee",
+        price: 9.99,
+        description: "Traditional Arabic coffee blend",
+        category: "coffee"
+      }
+    ];
+  };
 
   const addToCart = (product) => {
     const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingItem = savedCart.find(item => item.id === product.id);
+    const existingItemIndex = savedCart.findIndex(item => item.id === product.id);
     let updatedCart;
-    
-    if (existingItem) {
-      updatedCart = savedCart.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
+
+    if (existingItemIndex > -1) {
+      // Update quantity if item exists
+      updatedCart = [...savedCart];
+      updatedCart[existingItemIndex] = {
+        ...updatedCart[existingItemIndex],
+        quantity: (updatedCart[existingItemIndex].quantity || 1) + 1
+      };
     } else {
+      // Add new item
       updatedCart = [...savedCart, { ...product, quantity: 1 }];
     }
 
-    // Update both localStorage and state
+    // Save to localStorage and state
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCart(updatedCart);
 
-    // Dispatch event to notify other components
-    window.dispatchEvent(new Event('cartStorageUpdated'));
+    // Dispatch event to update navbar cart count
+    window.dispatchEvent(new Event('cartUpdated'));
 
     // Show notification
-    setNotification(`${product.name} added to cart!`);
+    setNotification(`✓ ${product.name} added to cart!`);
     setTimeout(() => setNotification(""), 3000);
   };
 
   const getTotalItems = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+    return cart.reduce((total, item) => total + (item.quantity || 1), 0);
+  };
+
+  // Get emoji for product category
+  const getCategoryEmoji = (category) => {
+    switch (category?.toLowerCase()) {
+      case 'coffee': return '☕';
+      case 'nuts': return '🥜';
+      case 'chocolate': return '🍫';
+      case 'sweets': return '🍬';
+      default: return '📦';
+    }
   };
 
   return (
@@ -114,7 +142,7 @@ function Home() {
         </div>
       )}
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
         <div className="p-6">
           {/* Header Section */}
@@ -138,63 +166,93 @@ function Home() {
             </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-center">
+              {error}
+            </div>
+          )}
+
           {/* Products Grid */}
           <div className="max-w-7xl mx-auto">
             <h2 className="text-3xl font-bold text-amber-800 text-center mb-8">
               Our Premium Products
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
+                <p className="text-amber-700">Loading products...</p>
+              </div>
+            ) : products.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-amber-700 text-lg">No products available</p>
+                <button 
+                  onClick={fetchProducts}
+                  className="mt-4 bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg"
                 >
-                  {/* Product Image */}
-                  <div className="h-48 bg-amber-200 flex items-center justify-center">
-                    <span className="text-amber-800 text-lg font-semibold text-center px-4">
-                      {product.name}
-                    </span>
-                  </div>
-                  
-                  {/* Product Info */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-amber-900 mb-2">
-                      {product.name}
-                    </h3>
-                    <p className="text-gray-600 mb-4">
-                      {product.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-amber-800">
-                        ${product.price}
-                      </span>
-                      <button
-                        onClick={() => addToCart(product)}
-                        className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200 flex items-center gap-2"
-                      >
-                        <span>Add to Cart</span>
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                  Retry
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {products.map((product) => (
+                  <div
+                    key={product.id}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                  >
+                    {/* Product Image Placeholder with Emoji */}
+                    <div className="h-48 bg-gradient-to-r from-amber-200 to-amber-300 flex items-center justify-center">
+                      <div className="text-center">
+                        <span className="text-6xl mb-2 block">
+                          {getCategoryEmoji(product.category)}
+                        </span>
+                        <span className="text-amber-800 text-lg font-semibold">
+                          {product.category || 'Product'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Product Info */}
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-amber-900 mb-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {product.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-2xl font-bold text-amber-800">
+                          ${product.price}
+                        </span>
+                        <button
+                          onClick={() => addToCart(product)}
+                          className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors duration-200 flex items-center gap-2"
+                          disabled={loading}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          />
-                        </svg>
-                      </button>
+                          <span>Add to Cart</span>
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                            />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
-            {/* Quick Info Section */}
+            {/* Store Info Section */}
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="bg-amber-50 rounded-lg p-6 border border-amber-200">
                 <h2 className="text-2xl font-semibold text-amber-800 mb-4">
